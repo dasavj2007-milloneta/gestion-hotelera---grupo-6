@@ -78,6 +78,10 @@ public class Reserva implements Reservable, Facturable {
         servicios.remove(servicio);
     }
 
+    public void setCalculadoraTarifa(CalculadoraTarifa calculadoraTarifa) {
+        this.calculadoraTarifa = calculadoraTarifa;
+    }
+
     public boolean estaActiva() {
         return estado != null && estado.equals("CONFIRMADA");
     }

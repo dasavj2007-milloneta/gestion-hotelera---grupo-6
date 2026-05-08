@@ -1,4 +1,4 @@
-package com.hotel.servicio;
+package com.hotel.servicios;
 
 import com.hotel.interfaces.CalculadoraTarifa;
 import com.hotel.modelo.Habitacion;

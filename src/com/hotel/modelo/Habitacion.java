@@ -29,4 +29,20 @@ public abstract class Habitacion {
     public void cambiarEstado(EstadoHabitacion estado) {
         this.estado = estado;
     }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public double getPrecioBase() {
+        return precioBase;
+    }
+
+    public void setPrecioBase(double precioBase) {
+        this.precioBase = precioBase;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.estado = disponible ? EstadoHabitacion.DISPONIBLE : EstadoHabitacion.OCUPADA;
+    }
 }
