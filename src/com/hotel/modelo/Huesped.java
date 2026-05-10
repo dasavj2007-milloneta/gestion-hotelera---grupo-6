@@ -24,4 +24,12 @@ public class Huesped {
     public void actualizarDatos() {
         System.out.println("Datos actualizados");
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getCedula() {
+        return documento;
+    }
 }

@@ -18,6 +18,8 @@ public class Reserva implements Reservable, Facturable {
     private Habitacion habitacion;
     private List<ServicioAdicional> servicios;
     private CalculadoraTarifa calculadoraTarifa;
+    private String codigoDescuento;
+    private double porcentajeDescuento;
 
     public Reserva(int id, LocalDate fechaInicio,
                    LocalDate fechaFin,
@@ -32,18 +34,30 @@ public class Reserva implements Reservable, Facturable {
         this.habitacion = habitacion;
         this.calculadoraTarifa = calculadoraTarifa;
         this.servicios = new ArrayList<>();
+        this.codigoDescuento = null;
+        this.porcentajeDescuento = 0.0;
     }
 
     @Override
     public double calcularTotal() {
+        // Calcular precio base de la habitación sin descuento
+        double totalHabitacion = habitacion.calcularPrecio() * calcularDias();
 
-        double total = calculadoraTarifa.calcular(habitacion, calcularDias());
-
+        // Sumar servicios
+        double totalServicios = 0;
         for (ServicioAdicional servicio : servicios) {
-            total += servicio.calcularCosto();
+            totalServicios += servicio.calcularCosto();
         }
 
-        return total;
+        // Total sin descuento
+        double totalSinDescuento = totalHabitacion + totalServicios;
+
+        // Aplicar descuento si existe
+        if (porcentajeDescuento > 0) {
+            return totalSinDescuento * (1 - (porcentajeDescuento / 100));
+        }
+
+        return totalSinDescuento;
     }
 
     @Override
@@ -84,5 +98,37 @@ public class Reserva implements Reservable, Facturable {
 
     public boolean estaActiva() {
         return estado != null && estado.equals("CONFIRMADA");
+    }
+
+    public Huesped getHuesped() {
+        return huesped;
+    }
+
+    public Habitacion getHabitacion() {
+        return habitacion;
+    }
+
+    public CalculadoraTarifa getCalculadoraTarifa() {
+        return calculadoraTarifa;
+    }
+
+    public List<ServicioAdicional> getServicios() {
+        return servicios;
+    }
+
+    public void setCodigoDescuento(String codigoDescuento) {
+        this.codigoDescuento = codigoDescuento;
+    }
+
+    public String getCodigoDescuento() {
+        return codigoDescuento;
+    }
+
+    public void setPorcentajeDescuento(double porcentajeDescuento) {
+        this.porcentajeDescuento = porcentajeDescuento;
+    }
+
+    public double getPorcentajeDescuento() {
+        return porcentajeDescuento;
     }
 }

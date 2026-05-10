@@ -22,4 +22,8 @@ public class ServicioAdicional implements Serviciable {
     public String obtenerDescripcion() {
         return nombre;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
 }
