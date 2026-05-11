@@ -27,4 +27,16 @@ public class Empleado {
     public void crearReserva() {
         System.out.println("Reserva creada");
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
 }

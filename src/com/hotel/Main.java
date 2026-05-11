@@ -18,10 +18,9 @@ public class Main {
 
         // Inicializar habitaciones de ejemplo
         habitaciones.add(new HabitacionSimple(101, 100000.0, 2));
-        habitaciones.add(new HabitacionSuite(102, 200000.0, 4, true));
-        HabitacionSimple ocupada = new HabitacionSimple(103, 120000.0, 3);
-        ocupada.setDisponible(false);
-        habitaciones.add(ocupada);
+        habitaciones.add(new HabitacionSuite(102, 250000.0, 4, true));
+        habitaciones.add(new HabitacionSuitePresidencial(103, 350000.0, 4, true, true));
+        habitaciones.add(new HabitacionPenthouse(104, 500000.0, 6, true, true, true));
 
         System.out.println("╔════════════════════════════════════╗");
         System.out.println("║  ✨ BIENVENIDO AL HOTEL SWIFT ✨   ║");
@@ -56,15 +55,19 @@ public class Main {
                 System.out.println("\n╔════════════════════════════════════╗");
                 System.out.println("║    SELECCIÓN DE HABITACIÓN         ║");
                 System.out.println("╠════════════════════════════════════╣");
-                System.out.println("║  1. Habitación Simple ($100,000)   ║");
-                System.out.println("║  2. Habitación Suite ($200,000)    ║");
+                System.out.println("║  1. Simple - $100,000              ║");
+                System.out.println("║  2. Suite - $250,000               ║");
+                System.out.println("║  3. Suite Presidencial - $350,000  ║");
+                System.out.println("║  4. Penthouse - $500,000           ║");
                 System.out.println("╚════════════════════════════════════╝");
-                int tipoHab = leerOpcionValida(scanner, 1, 2);
+                int tipoHab = leerOpcionValida(scanner, 1, 4);
 
                 Habitacion habitacionSeleccionada = null;
                 for (Habitacion h : habitaciones) {
-                    if ((tipoHab == 1 && h instanceof HabitacionSimple && h.estaDisponible()) ||
-                        (tipoHab == 2 && h instanceof HabitacionSuite && h.estaDisponible())) {
+                    if ((tipoHab == 1 && h instanceof HabitacionSimple && !(h instanceof HabitacionSuitePresidencial) && h.estaDisponible()) ||
+                        (tipoHab == 2 && h instanceof HabitacionSuite && !(h instanceof HabitacionSuitePresidencial) && !(h instanceof HabitacionPenthouse) && h.estaDisponible()) ||
+                        (tipoHab == 3 && h instanceof HabitacionSuitePresidencial && h.estaDisponible()) ||
+                        (tipoHab == 4 && h instanceof HabitacionPenthouse && h.estaDisponible())) {
                         habitacionSeleccionada = h;
                         break;
                     }
@@ -191,45 +194,109 @@ public class Main {
                     continue;
                 }
                 
-                System.out.println("\n✓ Bienvenido, Admin\n");
+                // Crear empleado con datos de prueba
+                Empleado empleado = new Empleado(1, "Juan", "Gerente");
+                
+                System.out.println("\n✓ Bienvenido, " + empleado.getNombre() + "\n");
                 System.out.println("╔════════════════════════════════════╗");
-                System.out.println("║    OPCIONES DE EMPLEADO            ║");
+                System.out.println("║    INFORMACIÓN DEL EMPLEADO        ║");
                 System.out.println("╠════════════════════════════════════╣");
-                System.out.println("║  1. Ver habitaciones               ║");
-                System.out.println("║  2. Editar habitación              ║");
-                System.out.println("╚════════════════════════════════════╝");
-                int empOpcion = leerOpcionValida(scanner, 1, 2);
-
-                if (empOpcion == 1) {
-                    System.out.println("\n╔════════════════════════════════════╗");
-                    System.out.println("║    LISTA DE HABITACIONES           ║");
+                System.out.println("║ Nombre: " + empleado.getNombre());
+                System.out.println("║ ID: " + empleado.getId());
+                System.out.println("║ Cargo: " + empleado.getCargo());
+                System.out.println("╚════════════════════════════════════╝\n");
+                
+                // Bucle del menú de empleado
+                boolean enMenuEmpleado = true;
+                while (enMenuEmpleado) {
+                    System.out.println("╔════════════════════════════════════╗");
+                    System.out.println("║    OPCIONES DE EMPLEADO            ║");
                     System.out.println("╠════════════════════════════════════╣");
-                    for (Habitacion h : habitaciones) {
-                        String tipo = h instanceof HabitacionSimple ? "Simple" : "Suite";
-                        String estado = h.estaDisponible() ? "✓ Disponible" : "✗ Ocupada";
-                        System.out.println("║ Hab " + h.getNumero() + " - " + tipo + " - " + estado);
-                    }
-                    System.out.println("╚════════════════════════════════════╝\n");
-                } else if (empOpcion == 2) {
-                    System.out.println("Ingrese número de habitación a editar:");
-                    int numHab = leerOpcionValida(scanner, 100, 999);
-                    Habitacion habEditar = null;
-                    for (Habitacion h : habitaciones) {
-                        if (h.getNumero() == numHab) {
-                            habEditar = h;
-                            break;
+                    System.out.println("║  1. Ver habitaciones               ║");
+                    System.out.println("║  2. Editar habitación              ║");
+                    System.out.println("║  3. Salir del menú de Empleado     ║");
+                    System.out.println("╚════════════════════════════════════╝");
+                    int empOpcion = leerOpcionValida(scanner, 1, 3);
+
+                    if (empOpcion == 1) {
+                        System.out.println("\n╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+                        System.out.println("║                                       LISTA DE HABITACIONES                                             ║");
+                        System.out.println("╠══════════════════════════════════════════════════════════════════════════════════════════════════════════════╣");
+                        for (Habitacion h : habitaciones) {
+                            String tipo;
+                            String servicios;
+                            if (h instanceof HabitacionPenthouse) {
+                                tipo = "Penthouse";
+                                servicios = "Jacuzzi, Balcón, Bar Libre, Desayuno, Snacks";
+                            } else if (h instanceof HabitacionSuitePresidencial) {
+                                tipo = "Suite Presidencial";
+                                servicios = "Jacuzzi, Balcón, Desayuno";
+                            } else if (h instanceof HabitacionSuite) {
+                                tipo = "Suite";
+                                servicios = "Jacuzzi";
+                            } else {
+                                tipo = "Simple";
+                                servicios = "Sin servicios adicionales";
+                            }
+                            String estado = h.estaDisponible() ? "✓ Disponible" : "✗ Ocupada";
+                            String precio = String.format("$%,.0f", h.getPrecioBase());
+                            System.out.printf("║ Hab %-3d - %-18s - %-10s - %-25s - %s%n",
+                                h.getNumero(), tipo, precio, servicios, estado);
                         }
-                    }
-                    if (habEditar != null) {
-                        System.out.println("Nuevo precio:");
-                        double nuevoPrecio = leerNumeroValido(scanner);
-                        System.out.println("Disponible? (s/n)");
-                        boolean disponible = leerInputValido(scanner).equalsIgnoreCase("s");
-                        habEditar.setPrecioBase(nuevoPrecio);
-                        habEditar.setDisponible(disponible);
-                        System.out.println("Habitación editada.");
-                    } else {
-                        System.out.println("Habitación no encontrada.");
+                        System.out.println("╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝\n");
+                    } else if (empOpcion == 2) {
+                        System.out.println("\n╔════════════════════════════════════╗");
+                        System.out.println("║   EDITAR HABITACIÓN                ║");
+                        System.out.println("╚════════════════════════════════════╝");
+                        System.out.println("Ingrese número de habitación a editar:");
+                        int numHab = leerOpcionValida(scanner, 100, 999);
+                        Habitacion habEditar = null;
+                        for (Habitacion h : habitaciones) {
+                            if (h.getNumero() == numHab) {
+                                habEditar = h;
+                                break;
+                            }
+                        }
+                        if (habEditar != null) {
+                            boolean editandoHab = true;
+                            while (editandoHab) {
+                                System.out.println("\n╔════════════════════════════════════╗");
+                                System.out.println("║   OPCIONES DE EDICIÓN              ║");
+                                System.out.println("╠════════════════════════════════════╣");
+                                System.out.println("║  1. Editar precio                  ║");
+                                System.out.println("║  2. Editar disponibilidad          ║");
+                                System.out.println("║  3. Check-in (marcar como ocupada) ║");
+                                System.out.println("║  4. Check-out (marcar disponible)  ║");
+                                System.out.println("║  5. Volver al menú anterior        ║");
+                                System.out.println("╚════════════════════════════════════╝");
+                                int editOpcion = leerOpcionValida(scanner, 1, 5);
+                                
+                                if (editOpcion == 1) {
+                                    System.out.println("Nuevo precio:");
+                                    double nuevoPrecio = leerNumeroValido(scanner);
+                                    habEditar.setPrecioBase(nuevoPrecio);
+                                    System.out.println("✓ Precio actualizado a $" + String.format("%,.0f", nuevoPrecio));
+                                } else if (editOpcion == 2) {
+                                    System.out.println("¿Disponible? (s/n)");
+                                    boolean disponible = leerInputValido(scanner).equalsIgnoreCase("s");
+                                    habEditar.setDisponible(disponible);
+                                    String estado = disponible ? "Disponible" : "Ocupada";
+                                    System.out.println("✓ Habitación marcada como " + estado);
+                                } else if (editOpcion == 3) {
+                                    habEditar.setDisponible(false);
+                                    System.out.println("✓ Check-in realizado - Habitación marcada como ocupada");
+                                } else if (editOpcion == 4) {
+                                    habEditar.setDisponible(true);
+                                    System.out.println("✓ Check-out realizado - Habitación marcada como disponible");
+                                } else if (editOpcion == 5) {
+                                    editandoHab = false;
+                                }
+                            }
+                        } else {
+                            System.out.println("✗ Habitación no encontrada.");
+                        }
+                    } else if (empOpcion == 3) {
+                        enMenuEmpleado = false;
                     }
                 }
 
