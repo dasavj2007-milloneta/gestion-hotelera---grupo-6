@@ -4,11 +4,13 @@ public class Empleado {
 
     private int id;
     private String nombre;
+    private String cedula;
     private String cargo;
 
-    public Empleado(int id, String nombre, String cargo) {
+    public Empleado(int id, String nombre, String cedula, String cargo) {
         this.id = id;
         this.nombre = nombre;
+        this.cedula = cedula;
         this.cargo = cargo;
     }
 
@@ -34,6 +36,10 @@ public class Empleado {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public String getCedula() {
+        return cedula;
     }
 
     public String getCargo() {

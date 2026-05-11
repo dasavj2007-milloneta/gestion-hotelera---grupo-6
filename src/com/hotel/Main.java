@@ -52,14 +52,14 @@ public class Main {
 
                 Huesped huesped = new Huesped(1, nombre, cedula, telefono, email);
 
-                System.out.println("\n╔════════════════════════════════════╗");
-                System.out.println("║    SELECCIÓN DE HABITACIÓN         ║");
-                System.out.println("╠════════════════════════════════════╣");
-                System.out.println("║  1. Simple - $100,000              ║");
-                System.out.println("║  2. Suite - $250,000               ║");
-                System.out.println("║  3. Suite Presidencial - $350,000  ║");
-                System.out.println("║  4. Penthouse - $500,000           ║");
-                System.out.println("╚════════════════════════════════════╝");
+                System.out.println("\n╔═════════════════════════════════════════════════════════════════════════════════════╗");
+                System.out.println("║                               SELECCIÓN DE HABITACIÓN                               ║");
+                System.out.println("╠═════════════════════════════════════════════════════════════════════════════════════╣");
+                System.out.println("║  1. Simple - $100,000              - Sin servicios adicionales                      ║");
+                System.out.println("║  2. Suite - $250,000               - Jacuzzi                                        ║");
+                System.out.println("║  3. Suite Presidencial - $350,000  - Jacuzzi, Balcón, Desayuno                      ║");
+                System.out.println("║  4. Penthouse - $500,000           - Jacuzzi, Balcón, Bar Libre, Desayuno, Snacks   ║");
+                System.out.println("╚═════════════════════════════════════════════════════════════════════════════════════╝");
                 int tipoHab = leerOpcionValida(scanner, 1, 4);
 
                 Habitacion habitacionSeleccionada = null;
@@ -89,6 +89,9 @@ public class Main {
                 LocalDate checkOut = leerFechaValida(scanner);
 
                 Reserva reserva = new Reserva(reservas.size() + 1, checkIn, checkOut, huesped, habitacionSeleccionada, new TarifaRegular());
+                
+                // Asignar el huésped a la habitación
+                habitacionSeleccionada.setHuesped(huesped);
                 
                 System.out.println("\n╔════════════════════════════════════╗");
                 System.out.println("║    SERVICIOS ADICIONALES           ║");
@@ -195,14 +198,14 @@ public class Main {
                 }
                 
                 // Crear empleado con datos de prueba
-                Empleado empleado = new Empleado(1, "Juan", "Gerente");
+                Empleado empleado = new Empleado(1, "Juan", "1075242815", "Gerente");
                 
                 System.out.println("\n✓ Bienvenido, " + empleado.getNombre() + "\n");
                 System.out.println("╔════════════════════════════════════╗");
                 System.out.println("║    INFORMACIÓN DEL EMPLEADO        ║");
                 System.out.println("╠════════════════════════════════════╣");
                 System.out.println("║ Nombre: " + empleado.getNombre());
-                System.out.println("║ ID: " + empleado.getId());
+                System.out.println("║ Cédula: " + empleado.getCedula());
                 System.out.println("║ Cargo: " + empleado.getCargo());
                 System.out.println("╚════════════════════════════════════╝\n");
                 
@@ -242,6 +245,11 @@ public class Main {
                             String precio = String.format("$%,.0f", h.getPrecioBase());
                             System.out.printf("║ Hab %-3d - %-18s - %-10s - %-25s - %s%n",
                                 h.getNumero(), tipo, precio, servicios, estado);
+                            
+                            // Mostrar información del huésped si la habitación está ocupada
+                            if (!h.estaDisponible() && h.getHuesped() != null) {
+                                System.out.printf("║       └─ Huésped: %s (Cédula: %s)%n", h.getHuesped().getNombre(), h.getHuesped().getCedula());
+                            }
                         }
                         System.out.println("╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝\n");
                     } else if (empOpcion == 2) {
@@ -287,6 +295,7 @@ public class Main {
                                     System.out.println("✓ Check-in realizado - Habitación marcada como ocupada");
                                 } else if (editOpcion == 4) {
                                     habEditar.setDisponible(true);
+                                    habEditar.setHuesped(null);
                                     System.out.println("✓ Check-out realizado - Habitación marcada como disponible");
                                 } else if (editOpcion == 5) {
                                     editandoHab = false;
