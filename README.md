@@ -1,15 +1,21 @@
-# 📚 Sistema de Gestión de Hotel
+# 📚 Sistema de Gestión Hotelera
 
 ## 📖 Descripción del Sistema
 
-Sistema para gestionar la administración de un hotel: habitaciones,
-reservas, huéspedes, empleados y servicios adicionales. Permite
-realizar check-in, check-out, consumo de servicios (spa, restaurante,
-lavandería) y generación de facturas.
+Sistema orientado a la administración de un hotel, permitiendo gestionar habitaciones, reservas, huéspedes, empleados, servicios adicionales y facturación.
+
+El sistema permite:
+
+* Registrar huéspedes.
+* Crear y gestionar reservas.
+* Realizar procesos de check-in y check-out.
+* Calcular tarifas según el tipo de habitación y temporada.
+* Agregar servicios adicionales (spa, restaurante, lavandería, minibar, etc.).
+* Generar facturas automáticamente.
 
 ---
 
-## 👥 Integrantes
+# 👥 Integrantes
 
 | Nombre                        | Correo                                                                      |
 | ----------------------------- | --------------------------------------------------------------------------- |
@@ -18,60 +24,213 @@ lavandería) y generación de facturas.
 
 ---
 
-## 🔗 Explicación de Relaciones
+# 🧩 Relaciones UML
 
-### Herencia (──▷)
+## 🔷 Herencia (Generalización) `──▷`
 
-* **HabitacionSimple** y **HabitacionSuite** heredan de **Habitacion**
-  (clase abstracta).
-* Justificación: Ambas representan tipos específicos de habitación que
-  comparten atributos comunes (número, precio base, capacidad, estado),
-  pero difieren en sus características y en la forma de calcular el precio.
+### HabitacionSimple → Habitacion
 
----
+### HabitacionSuite → Habitacion
 
-### Composición (◆───)
+### HabitacionSuitePresidencial → Habitacion
 
-* **Reserva** contiene una **Habitacion**.
+### HabitacionPenthouse → Habitacion
 
-  * Multiplicidad: 1 Reserva → 1 Habitación
-* **Factura** contiene una **Reserva**.
+**Justificación:**
+Todas las habitaciones comparten atributos comunes como:
 
-  * Multiplicidad: 1 Factura → 1 Reserva
-* Justificación: Una reserva no tiene sentido sin una habitación asignada
-  y una factura depende directamente de una reserva realizada.
+* número
+* precioBase
+* capacidad
+* estado
 
----
-
-### Asociación (─────)
-
-* **Huesped** se asocia con **Reserva**.
-
-  * Multiplicidad: 1 Huésped → 0..* Reservas
-* **Reserva** se asocia con **ServicioAdicional**.
-
-  * Multiplicidad: 1 Reserva → 0..* Servicios
-* **Empleado** se asocia con **Reserva**.
-
-  * Multiplicidad: 1 Empleado → 0..* Reservas
-* Justificación: Estas relaciones representan interacción entre clases,
-  pero pueden existir de forma independiente dentro del sistema.
+Pero cada una implementa su propia lógica para calcular el precio y posee características específicas.
 
 ---
 
-## 📝 Clases Implementadas
+## ◆ Composición
 
-| Clase             | Tipo      | Atributos                                              | Descripción                |
-| ----------------- | --------- | ------------------------------------------------------ | -------------------------- |
-| Habitacion        | Abstracta | numero, precioBase, capacidad, estado                  | Clase base de habitaciones |
-| HabitacionSimple  | Concreta  | (hereda de Habitacion)                                 | Habitación estándar        |
-| HabitacionSuite   | Concreta  | jacuzzi                                                | Habitación de lujo         |
-| Huesped           | Concreta  | id, nombre, documento, telefono, email                 | Cliente del hotel          |
-| Reserva           | Concreta  | id, fechaInicio, fechaFin, estado, huesped, habitacion | Gestión de reservas        |
-| ServicioAdicional | Concreta  | id, nombre, precio                                     | Servicios del hotel        |
-| Factura           | Concreta  | id, total, reserva                                     | Facturación                |
-| Empleado          | Concreta  | id, nombre, cargo                                      | Personal del hotel         |
+### Reserva ◆── Habitacion
+
+**Multiplicidad:**
+1 Reserva → 1 Habitación
+
+### Factura ◆── Reserva
+
+**Multiplicidad:**
+1 Factura → 1 Reserva
+
+**Justificación:**
+Una reserva no puede existir sin una habitación asignada y una factura depende directamente de una reserva.
 
 ---
 
-*Proyecto de Programación y Diseño Orientado a Objetos — Corhuila 2026*
+## ◇ Agregación
+
+### Reserva ◇── ServicioAdicional
+
+**Multiplicidad:**
+1 Reserva → 0..* Servicios
+
+**Justificación:**
+Los servicios adicionales pueden existir independientemente de la reserva y agregarse cuando sea necesario.
+
+---
+
+## ─ Asociación
+
+### Huesped ─ Reserva
+
+**Multiplicidad:**
+1 Huésped → 0..* Reservas
+
+### Empleado ─ Reserva
+
+**Multiplicidad:**
+1 Empleado → 0..* Reservas
+
+**Justificación:**
+Representan interacción entre entidades del sistema sin dependencia fuerte.
+
+---
+
+## ⇢ Dependencia
+
+### Reserva ⇢ CalculadoraTarifa
+
+**Justificación:**
+La clase `Reserva` utiliza la interfaz `CalculadoraTarifa` para calcular el costo de la estadía sin depender de implementaciones concretas.
+
+---
+
+# 📝 Clases Implementadas
+
+| Clase                       | Tipo      | Atributos Principales                      | Métodos Principales                                                                       |
+| --------------------------- | --------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| Habitacion                  | Abstracta | numero, precioBase, capacidad, estado      | calcularPrecio(), obtenerDescripcion(), cambiarEstado()                                   |
+| HabitacionSimple            | Concreta  | Hereda de Habitacion                       | calcularPrecio()                                                                          |
+| HabitacionSuite             | Concreta  | jacuzzi                                    | calcularPrecio()                                                                          |
+| HabitacionSuitePresidencial | Concreta  | jacuzzi, balcon, desayuno                  | calcularPrecio()                                                                          |
+| HabitacionPenthouse         | Concreta  | jacuzzi, balcon, desayuno, minibar, snacks | calcularPrecio()                                                                          |
+| Huesped                     | Concreta  | id, nombre, documento, telefono, email     | registrarse(), actualizarDatos(), consultarReservas()                                     |
+| Reserva                     | Concreta  | id, fechaInicio, fechaFin, estado          | calcularTotal(), confirmar(), cancelar(), agregarServicio(), calcularDias(), estaActiva() |
+| ServicioAdicional           | Concreta  | id, nombre, precio                         | calcularCosto()                                                                           |
+| Factura                     | Concreta  | id, total                                  | generarFactura(), calcularTotal(), exportarPDF(), mostrarDetalle(), checkIn(), checkOut() |
+| Empleado                    | Concreta  | id, nombre, cargo                          | gestionarReserva(), registrarCheckIn(), registrarCheckOut(), crearReserva()               |
+
+---
+
+# 🧠 Interfaces y Estrategias
+
+## <<interface>> CalculadoraTarifa
+
+Define el contrato para calcular tarifas dinámicamente.
+
+### Método:
+
+```java
+calcular(Habitacion habitacion, int dias): double
+```
+
+---
+
+## Implementaciones de Estrategia
+
+### TarifaRegular
+
+Calcula el precio normal de hospedaje.
+
+### TarifaTemporadaAlta
+
+Incrementa el valor en temporadas especiales.
+
+### TarifaDescuento
+
+Aplica descuentos promocionales.
+
+---
+
+# 🏨 Tipos de Habitaciones
+
+## HabitacionSimple
+
+Habitación estándar para hospedaje básico.
+
+## HabitacionSuite
+
+Incluye jacuzzi y mayor comodidad.
+
+## HabitacionSuitePresidencial
+
+Incluye:
+
+* jacuzzi
+* balcón
+* desayuno incluido
+
+## HabitacionPenthouse
+
+Incluye:
+
+* jacuzzi
+* balcón
+* desayuno
+* minibar
+* snacks
+
+---
+
+# ⚙️ Principios SOLID Aplicados
+
+## SRP — Single Responsibility Principle
+
+Cada clase tiene una única responsabilidad.
+
+## OCP — Open/Closed Principle
+
+Es posible agregar nuevos tipos de habitaciones o tarifas sin modificar las clases existentes.
+
+## LSP — Liskov Substitution Principle
+
+Las subclases de `Habitacion` pueden reemplazar a la clase padre sin alterar el funcionamiento.
+
+## ISP — Interface Segregation Principle
+
+La interfaz `CalculadoraTarifa` contiene únicamente métodos necesarios.
+
+## DIP — Dependency Inversion Principle
+
+`Reserva` depende de la abstracción `CalculadoraTarifa` y no de implementaciones concretas.
+
+---
+
+# 📂 Estructura del Proyecto
+
+```text
+com
+│
+hotel
+│
+├── interfaces
+│   └── CalculadoraTarifa.java
+│
+├── modelo
+│   ├── Habitacion.java
+│   ├── HabitacionSimple.java
+│   ├── HabitacionSuite.java
+│   ├── HabitacionSuitePresidencial.java
+│   ├── HabitacionPenthouse.java
+│   ├── Huesped.java
+│   ├── Reserva.java
+│   ├── ServicioAdicional.java
+│   ├── Factura.java
+│   └── Empleado.java
+│
+├── servicio
+│   ├── TarifaRegular.java
+│   ├── TarifaTemporadaAlta.java
+│   └── TarifaDescuento.java
+│
+└── Main.java
+```
+
