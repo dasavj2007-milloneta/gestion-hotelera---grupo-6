@@ -15,10 +15,10 @@ public class HabitacionSuitePresidencial extends Habitacion {
     public double calcularPrecio() {
         double precio = precioBase;
         if (jacuzzi) {
-            precio *= 1.3;
+            precio *= 1;
         }
         if (butaca) {
-            precio *= 1.2;
+            precio *= 1;
         }
         return precio;
     }

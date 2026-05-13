@@ -11,6 +11,6 @@ public class HabitacionSuite extends Habitacion {
 
     @Override
     public double calcularPrecio() {
-        return jacuzzi ? precioBase * 1.5 : precioBase;
+        return jacuzzi ? precioBase * 1 : precioBase;
     }
 }

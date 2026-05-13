@@ -17,13 +17,13 @@ public class HabitacionPenthouse extends Habitacion {
     public double calcularPrecio() {
         double precio = precioBase;
         if (piscina) {
-            precio *= 1.4;
+            precio *= 1;
         }
         if (terraza) {
-            precio *= 1.3;
+            precio *= 1;
         }
         if (cine) {
-            precio *= 1.2;
+            precio *= 1;
         }
         return precio;
     }
