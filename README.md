@@ -74,4 +74,15 @@ lavandería) y generación de facturas.
 
 ---
 
+## 📝 Conclusiones
+
+El desarrollo del sistema de gestión hotelera permitió aplicar de manera práctica los fundamentos de la Programación Orientada a Objetos, integrando conceptos como herencia, abstracción, encapsulamiento y polimorfismo en un entorno cercano a un caso real. Gracias a esto, se logró construir una estructura organizada, reutilizable y fácil de mantener.
+
+Además, la implementación de interfaces y principios SOLID ayudó a mejorar la calidad del diseño del software, permitiendo que las clases fueran más independientes y flexibles ante futuros cambios o ampliaciones del sistema. Esto facilita agregar nuevas funcionalidades sin afectar el código existente.
+
+El uso del diagrama UML fue fundamental para visualizar la arquitectura del proyecto y comprender las relaciones entre las diferentes clases, permitiendo una mejor planificación antes de la etapa de codificación y reduciendo posibles errores en la implementación.
+
+Finalmente, el trabajo colaborativo mediante GitHub permitió mantener un control adecuado de versiones, registrar el progreso del proyecto y fortalecer la organización del equipo durante el desarrollo de la aplicación.
+
+
 *Proyecto de Programación y Diseño Orientado a Objetos — Corhuila 2026*
